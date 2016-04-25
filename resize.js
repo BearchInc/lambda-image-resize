@@ -11,7 +11,7 @@ exports.handler = function(event, context) {
 
     var obj = {
         'bucket': event.Records[0].s3.bucket.name,
-        'bucketOut': event.Records[0].s3.bucket.name + "-out",
+        'bucketOut': event.Records[0].s3.bucket.name.replace("-backup",""),
         'key': event.Records[0].s3.object.key,
     };
 
@@ -35,7 +35,7 @@ exports.handler = function(event, context) {
         },
         function upload(data, next) {
             // change file extension
-            var newFileName = obj.key.split(".")[0] + "-renamed.png";
+            var newFileName = obj.key;
             console.log("Uploading data to: " + obj.bucketOut);
             s3.putObject({
                 Bucket: obj.bucketOut,
