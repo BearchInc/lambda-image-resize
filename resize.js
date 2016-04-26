@@ -39,7 +39,7 @@ exports.handler = function(event, context) {
                 Bucket: obj.bucketOut,
                 Key: newFileName,
                 Body: data,
-                ContentType: "image/png" // set contentType as HTML
+                ContentType: "image/png"
             },
             next);
         }
