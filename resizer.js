@@ -11,7 +11,7 @@ exports.handler = function(event, context) {
 
     var obj = {
         'bucket': event.Records[0].s3.bucket.name,
-        'bucketOut': event.Records[0].s3.bucket.name.replace("-backup",""),
+        'bucketOut': event.Records[0].s3.bucket.name.replace("-backup", ""),
         'key': event.Records[0].s3.object.key,
     };
 
@@ -24,11 +24,11 @@ exports.handler = function(event, context) {
         },
         function transform(response, next) {
             var name = event.Records[0].s3.object.key;
-            var ext =  name.split('.').length === 2 ? name.split('.')[1] : undefined;
+            var ext = name.split('.').length === 2 ? name.split('.')[1] : undefined;
 
             console.log('file extension ' + ext);
 
-            if(ext === "png") {
+            if (ext === "png") {
                 gm(response.Body).size(function(err, size) {
                     var width = size.width * 0.8;
                     var height = size.height * 0.8;
@@ -44,12 +44,12 @@ exports.handler = function(event, context) {
             var newFileName = obj.key;
             console.log("Uploading data to: " + obj.bucketOut);
             s3.putObject({
-                Bucket: obj.bucketOut,
-                Key: newFileName,
-                Body: data,
-                ContentType: "image/png"
-            },
-            next);
+                    Bucket: obj.bucketOut,
+                    Key: newFileName,
+                    Body: data,
+                    ContentType: "image/png"
+                },
+                next);
         }
     ], function(err) {
         if (err) {
