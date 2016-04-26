@@ -20,17 +20,25 @@ exports.handler = function(event, context) {
             s3.getObject({
                 Bucket: obj.bucket,
                 Key: obj.key
-            },
-            next);
+            }, next);
         },
         function transform(response, next) {
-            gm(response.Body).size(function(err, size) {
-                var width = size.width * 0.8;
-                var height = size.height * 0.8;
-                this.resize(width, height).toBuffer('PNG', function(err, buffer) {
-                    next(null, buffer);
+            var name = event.Records[0].s3.object.key;
+            var ext =  name.split('.').length === 2 ? name.split('.')[1] : undefined;
+
+            console.log('file extension ' + ext);
+
+            if(ext === "png") {
+                gm(response.Body).size(function(err, size) {
+                    var width = size.width * 0.8;
+                    var height = size.height * 0.8;
+                    this.resize(width, height).toBuffer('PNG', function(err, buffer) {
+                        next(null, buffer);
+                    });
                 });
-            });
+            } else {
+                next('format ' + ext + ' not supported');
+            }
         },
         function upload(data, next) {
             var newFileName = obj.key;
