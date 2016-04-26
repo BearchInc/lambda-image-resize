@@ -12,7 +12,6 @@ exports.handler = function(event, context) {
 
     async.waterfall([
         function copy(next) {
-            // get Markdown object
             s3.copyObject({
                 Bucket: obj.bucketOut,
                 Key: obj.key,

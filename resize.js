@@ -17,7 +17,6 @@ exports.handler = function(event, context) {
 
     async.waterfall([
         function download(next) {
-            // get Markdown object
             s3.getObject({
                 Bucket: obj.bucket,
                 Key: obj.key
@@ -34,7 +33,6 @@ exports.handler = function(event, context) {
             });
         },
         function upload(data, next) {
-            // change file extension
             var newFileName = obj.key;
             console.log("Uploading data to: " + obj.bucketOut);
             s3.putObject({
