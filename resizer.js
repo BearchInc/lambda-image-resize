@@ -8,12 +8,13 @@ var s3 = new AWS.S3();
 
 exports.handler = function(event, context) {
     console.log('event: ' + JSON.stringify(event));
-
     var obj = {
         'bucket': event.Records[0].s3.bucket.name,
         'bucketOut': event.Records[0].s3.bucket.name.replace("-backup", ""),
         'key': event.Records[0].s3.object.key,
     };
+
+    var ext = "*";
 
     async.waterfall([
         function download(next) {
@@ -24,17 +25,23 @@ exports.handler = function(event, context) {
         },
         function transform(response, next) {
             var name = event.Records[0].s3.object.key;
-            var ext = name.split('.').length === 2 ? name.split('.')[1] : undefined;
+            ext = name.split('.').length === 2 ? name.split('.')[1] : undefined;
 
-            console.log('file extension ' + ext);
+            console.log('File extension ' + ext);
 
-            if (ext === "png") {
+            if (ext === "png" || ext === "jpeg" || ext === "jpg") {
                 gm(response.Body).size(function(err, size) {
-                    var width = size.width * 0.8;
-                    var height = size.height * 0.8;
-                    this.resize(width, height).toBuffer('PNG', function(err, buffer) {
-                        next(null, buffer);
-                    });
+                    var biggestDimension = Math.max(size.width, size.height);
+                    if (biggestDimension <= 640) {
+                        next('Image is alreayd smaller than 640 pixels');
+                    } else {
+                        var scaleFactor = 640/biggestDimension;
+                        var width = size.width * scaleFactor;
+                        var height = size.height * scaleFactor;
+                        this.resize(width, height).toBuffer('PNG', function(err, buffer) {
+                            next(null, buffer);
+                        });
+                    }
                 });
             } else {
                 next('format ' + ext + ' not supported');
@@ -43,11 +50,12 @@ exports.handler = function(event, context) {
         function upload(data, next) {
             var newFileName = obj.key;
             console.log("Uploading data to: " + obj.bucketOut);
+
             s3.putObject({
                     Bucket: obj.bucketOut,
                     Key: newFileName,
                     Body: data,
-                    ContentType: "image/png"
+                    ContentType: "image/" + ext
                 },
                 next);
         }
