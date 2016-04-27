@@ -20,11 +20,11 @@ exports.handler = function(event, context) {
             }, function(err, data) {
                 if (err) {
                     console.log('File does not exist, creating...');
-                    next(null, next);
+                    next(null);
                 } else {
                     next('Aborting. File already exists.');
                 }
-            })
+            });
         },
         function copy(next) {
             s3.copyObject({
