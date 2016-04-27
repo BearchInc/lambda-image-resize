@@ -19,7 +19,7 @@ exports.handler = function(event, context) {
                 'Key': obj.key
             }, function(err, data) {
                 if (err) {
-                    console.log('File does not exist, creating...');
+                    console.log('File does not exist, copying it...');
                     next(null);
                 } else {
                     next('Aborting. File already exists.');
@@ -42,4 +42,4 @@ exports.handler = function(event, context) {
         }
         context.done();
     });
-}
+};
