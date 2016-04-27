@@ -6,7 +6,7 @@ var async = require('async');
 
 var s3 = new AWS.S3();
 
-exports.handler = function(event, context) {
+exports.resize = function(event, context) {
     console.log('event: ' + JSON.stringify(event));
     var obj = {
         'bucket': event.Records[0].s3.bucket.name,
