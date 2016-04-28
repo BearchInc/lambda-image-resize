@@ -25,7 +25,12 @@ exports.resize = function(event, context) {
         },
         function transform(response, next) {
             var name = event.Records[0].s3.object.key;
-            ext = name.split('.').length === 2 ? name.split('.')[1] : undefined;
+            var list = name.split('.');
+            if(list.length >= 2) {
+                ext = list[list.length - 1];
+            } else {
+                ext = undefined;
+            }
 
             console.log('File extension ' + ext);
 

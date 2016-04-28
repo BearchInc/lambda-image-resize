@@ -3,7 +3,7 @@ var async = require('async');
 
 var s3 = new AWS.S3();
 
-exports.handler = function(event, context) {
+exports.backupFile = function(event, context) {
     console.log('event: ' + JSON.stringify(event));
 
     var obj = {
