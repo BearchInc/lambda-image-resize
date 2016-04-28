@@ -8,7 +8,7 @@ exports.backupFile = function(event, context) {
 
     var obj = {
         'bucket': event.Records[0].s3.bucket.name,
-        'bucketOut': event.Records[0].s3.bucket.name + "-backup",
+        'bucketOut': 'cgcdn-users-backup',
         'key': event.Records[0].s3.object.key,
     };
 

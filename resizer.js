@@ -10,7 +10,7 @@ exports.resize = function(event, context) {
     console.log('event: ' + JSON.stringify(event));
     var obj = {
         'bucket': event.Records[0].s3.bucket.name,
-        'bucketOut': event.Records[0].s3.bucket.name.replace("-backup", ""),
+        'bucketOut': 'cgcdn',
         'key': event.Records[0].s3.object.key,
     };
 
