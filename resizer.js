@@ -38,7 +38,7 @@ exports.resize = function(event, context) {
                 gm(response.Body).size(function(err, size) {
                     var biggestDimension = Math.max(size.width, size.height);
                     if (biggestDimension <= 640) {
-                        next('Image is alreayd smaller than 640 pixels');
+                        next('Image is already smaller than 640 pixels');
                     } else {
                         var scaleFactor = 640/biggestDimension;
                         var width = size.width * scaleFactor;
