@@ -60,7 +60,8 @@ exports.resize = function(event, context) {
                     Bucket: obj.bucketOut,
                     Key: newFileName,
                     Body: data,
-                    ContentType: "image/" + ext
+                    ContentType: "image/" + ext,
+                    ACL: 'public-read-write'
                 },
                 next);
         }
